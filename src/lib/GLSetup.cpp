@@ -6,7 +6,7 @@ static void error_callback(int error, const char* description) {
 }
 
 // GLFW setup
-GLFWwindow* setupGLFW(int major, int minor, int windowWidth, int windowHeight, bool debugging) {
+GLFWwindow* setupGLFW(string windowTitle, int major, int minor, int windowWidth, int windowHeight, bool debugging) {
 	
 	// Set GLFW error callback
 	glfwSetErrorCallback(error_callback);
@@ -27,7 +27,7 @@ GLFWwindow* setupGLFW(int major, int minor, int windowWidth, int windowHeight, b
 	
 	// Create our GLFW window
 	GLFWwindow* window = glfwCreateWindow(	windowWidth, windowHeight, 
-											"BasicGraphics", 
+											windowTitle.c_str(), 
 											NULL, NULL);
 
 	// Were we able to make it?

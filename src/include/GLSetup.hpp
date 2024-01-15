@@ -10,7 +10,7 @@
 #include <GLFW/glfw3.h>
 using namespace std;
 
-GLFWwindow* setupGLFW(int major, int minor, int windowWidth, int windowHeight, bool debugging);
+GLFWwindow* setupGLFW(string windowTitle, int major, int minor, int windowWidth, int windowHeight, bool debugging);
 void cleanupGLFW(GLFWwindow* window);
 void setupGLEW(GLFWwindow* window);
 void checkOpenGLVersion();

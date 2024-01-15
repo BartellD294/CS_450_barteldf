@@ -27,7 +27,7 @@ GLFWwindow* setupGLFW(int major, int minor, int windowWidth, int windowHeight, b
 	
 	// Create our GLFW window
 	GLFWwindow* window = glfwCreateWindow(	windowWidth, windowHeight, 
-											"RenderApp", 
+											"BasicGraphics", 
 											NULL, NULL);
 
 	// Were we able to make it?

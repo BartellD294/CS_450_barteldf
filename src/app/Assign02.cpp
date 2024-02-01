@@ -52,6 +52,54 @@ void createSimpleQuad(Mesh &m) {
 	m.indices.push_back(3);
 }
 
+// Create very simple mesh: a pentagon
+void createSimplePentagon(Mesh &m) {
+	// Clear out vertices and elements
+	m.vertices.clear();
+	m.indices.clear();
+
+	// Create four corners
+	Vertex upperLeft, upperRight;
+	Vertex lowerLeft, lowerRight;
+	Vertex far_right;
+
+	// Set positions of vertices
+	// Note: glm::vec3(x, y, z)
+	upperLeft.position = 	glm::vec3(-0.5,  0.5, 0.0);
+	upperRight.position = 	glm::vec3( 0.5,  0.5, 0.0);
+	lowerLeft.position = 	glm::vec3(-0.5, -0.5, 0.0);
+	lowerRight.position = 	glm::vec3( 0.5, -0.5, 0.0);
+	far_right.position = 	glm::vec3( 0.9,  0.0, 0.0);
+
+	// Set vertex colors (red, green, blue, white)
+	// Note: glm::vec4(red, green, blue, alpha)
+	upperLeft.color = 	glm::vec4(1.0, 0.0, 0.0, 1.0);
+	upperRight.color = 	glm::vec4(0.0, 1.0, 0.0, 1.0);
+	lowerLeft.color = 	glm::vec4(0.0, 0.0, 1.0, 1.0);
+	lowerRight.color = 	glm::vec4(1.0, 1.0, 1.0, 1.0);
+	far_right.color = 		glm::vec4(1.0, 0.0, 1.0, 1.0);	//magenta
+
+	// Add to mesh's list of vertices
+	m.vertices.push_back(upperLeft);
+	m.vertices.push_back(upperRight);	
+	m.vertices.push_back(lowerLeft);
+	m.vertices.push_back(lowerRight);
+	m.vertices.push_back(far_right);
+	
+	// Add indices for three triangles
+	m.indices.push_back(0);
+	m.indices.push_back(3);
+	m.indices.push_back(1);
+
+	m.indices.push_back(0);
+	m.indices.push_back(2);
+	m.indices.push_back(3);
+
+	m.indices.push_back(1);	//upper right
+	m.indices.push_back(3);	//lower right
+	m.indices.push_back(4);	//middle far right
+}
+
 // Main 
 int main(int argc, char **argv) {
 	
@@ -60,7 +108,7 @@ int main(int argc, char **argv) {
 
 	// GLFW setup
 	// Switch to 4.1 if necessary for macOS
-	GLFWwindow* window = setupGLFW("Assign01: barteldf", 4, 3, 800, 800, DEBUG_MODE);
+	GLFWwindow* window = setupGLFW("Assign02: barteldf", 4, 3, 800, 800, DEBUG_MODE);
 
 	// GLEW setup
 	setupGLEW(window);
@@ -78,8 +126,8 @@ int main(int argc, char **argv) {
 	GLuint programID = 0;
 	try {		
 		// Load vertex shader code and fragment shader code
-		string vertexCode = readFileToString("./shaders/Assign01/Basic.vs");
-		string fragCode = readFileToString("./shaders/Assign01/Basic.fs");
+		string vertexCode = readFileToString("./shaders/Assign02/Basic.vs");
+		string fragCode = readFileToString("./shaders/Assign02/Basic.fs");
 
 		// Print out shader code, just to check
 		if(DEBUG_MODE) printShaderCode(vertexCode, fragCode);
@@ -95,7 +143,7 @@ int main(int argc, char **argv) {
 
 	// Create simple quad
 	Mesh m;
-	createSimpleQuad(m);
+	createSimplePentagon(m);
 
 	// Create OpenGL mesh (VAO) from data
 	MeshGL mgl;

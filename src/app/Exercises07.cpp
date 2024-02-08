@@ -9,30 +9,40 @@
 #include "glm/gtc/matrix_transform.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
-
+#include "glm/gtx/transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 using namespace std;
 
 glm::mat4 modelMat(1.0);
 
-void printRM(string name, glm::mat4 &m)
-{
-    cout << name <<": " << endl;
-    for (int i = 0; i < 3; i++)
-    {
-
+void printRM(string name, glm::mat3 &m) {
+    cout << name << ": " << endl;
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            cout << m[j][i] << ",";
+        }
+        cout << endl;
     }
 }
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS || action == GLFW_REPEAT)
-    {
-        if (key == GLFW_KEY_ESCAPE)
-        {
+void printRM(string name, glm::mat4 &m) {
+    cout << name << ": " << endl;
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            cout << m[j][i] << ",";
+        }
+        cout << endl;
+    }
+}
+
+static void key_callback(GLFWwindow *window,
+                        int key, int scancode,
+                        int action, int mods) {
+    if(action == GLFW_PRESS || action == GLFW_REPEAT) {
+        if(key == GLFW_KEY_ESCAPE) {
             glfwSetWindowShouldClose(window, true);
         }
-        else if (key == GLFW_KEY_Q)
-        {
+        else if(key == GLFW_KEY_Q) {
             cout << "KEY Q!" << endl;
         }
     }
@@ -63,6 +73,12 @@ int main(int argc, char **argv) {
     glm::vec3 E(7,8,0);
     glm::vec3 AcE = glm::cross(A, E);
     cout << "(A x E): " << glm::to_string(AcE) << endl;
+    
+
+
+
+
+
 
     glfwSetErrorCallback(error_callback);
     if(!glfwInit()) {
@@ -80,7 +96,7 @@ int main(int argc, char **argv) {
     int frameWidth = 800;
     int frameHeight = 600;
     GLFWwindow *window = glfwCreateWindow(frameWidth, frameHeight, 
-                                            "Exercises07", 
+                                            "ProfExercises03", 
                                             NULL, NULL);
 
     if(!window) {
@@ -150,6 +166,7 @@ int main(int argc, char **argv) {
                         vertOnly.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -160,6 +177,7 @@ int main(int argc, char **argv) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(GLuint),
                     indices.data(), GL_STATIC_DRAW);
+    
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -169,6 +187,9 @@ int main(int argc, char **argv) {
     cout << "VBO: " << VBO << endl;
     cout << "EBO: " << EBO << endl;
     cout << "progID: " << progID << endl;
+
+
+
 
     glClearColor(1.0, 1.0, 0.0, 1.0);
     glEnable(GL_DEPTH_TEST);

@@ -15,20 +15,27 @@ using namespace std;
 
 glm::mat4 modelMat(1.0);
 string transformString = "v";
+glm::mat4 viewMat(1.0);
+glm::mat4 projMat(1.0);
 
-void printRM(string name, glm::mat3 &m) {
+void printRM(string name, glm::mat3 &m)
+{
     cout << name << ": " << endl;
-    for(int i = 0; i < 3; i++) {
-        for(int j = 0; j < 3; j++) {
+    for(int i = 0; i < 3; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
             cout << m[j][i] << ",";
         }
         cout << endl;
     }
 }
 
-void printRM(string name, glm::mat4 &m) {
+void printRM(string name, glm::mat4 &m)
+{
     cout << name << ": " << endl;
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++)
+    {
         for(int j = 0; j < 4; j++) {
             cout << m[j][i] << ",";
         }
@@ -108,11 +115,13 @@ static void key_callback(GLFWwindow *window,
     }
 }
 
-static void error_callback(int error, const char* desc) {
+static void error_callback(int error, const char* desc)
+{
     cerr << "ERROR " << error << ": " << desc << endl;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     cout << "BEGIN OPENGL ADVENTURE!" << endl;
 
     glm::vec3 A(1,4,0);
@@ -141,7 +150,8 @@ int main(int argc, char **argv) {
 
 
     glfwSetErrorCallback(error_callback);
-    if(!glfwInit()) {
+    if(!glfwInit())
+    {
         cerr << "ERROR: GLFW FAILED!" << endl;
         exit(1);
     }
@@ -159,7 +169,8 @@ int main(int argc, char **argv) {
                                             "Exercises07", 
                                             NULL, NULL);
 
-    if(!window) {
+    if(!window)
+    {
         cerr << "ERROR: WINDOW FAILED!" << endl;
         glfwTerminate();
         exit(1);
@@ -172,7 +183,8 @@ int main(int argc, char **argv) {
 
     glewExperimental = true;
     GLenum err = glewInit();
-    if(err != GLEW_OK) {
+    if(err != GLEW_OK)
+    {
         cerr << "GLEW ERROR: ";
         cerr << glewGetErrorString(err) << endl;
         glfwTerminate();
@@ -204,9 +216,14 @@ int main(int argc, char **argv) {
     glDeleteShader(fragID);
 
     GLint modelMatLoc = glGetUniformLocation(progID, "modelMat");
+    GLint viewMatLoc = glGetUniformLocation(progID, "viewMat");
+    GLint projMatLoc = glGetUniformLocation(progID, "projMat");
     cout << "modelMatLoc: " << modelMatLoc << endl;
+    cout << "viewMatLoc: " << viewMatLoc << endl;
+    cout << "projMatLoc: " << projMatLoc << endl;
 
-    vector<GLfloat> vertOnly = {
+    vector<GLfloat> vertOnly =
+    {
         -0.3f, -0.3f, 0.0f,
         0.3f, -0.3f, 0.0f,
         -0.3f, 0.3f, 0.0f,
@@ -254,13 +271,28 @@ int main(int argc, char **argv) {
     glClearColor(1.0, 1.0, 0.0, 1.0);
     glEnable(GL_DEPTH_TEST);
 
-    while(!glfwWindowShouldClose(window)) {
+    while(!glfwWindowShouldClose(window))
+    {
         glfwGetFramebufferSize(window, &frameWidth, &frameHeight);
+        float aspect = 1;
+        if (frameHeight > 0)
+        {
+            aspect = ((float)frameWidth) / ((float)frameHeight);
+        }
+        float fov = glm::radians(90.0f);
+
         glViewport(0,0,frameWidth,frameHeight);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(progID);
 
         glUniformMatrix4fv(modelMatLoc, 1, false, glm::value_ptr(modelMat));
+
+
+        viewMat = glm::lookAt(glm::vec3(1,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
+        glUniformMatrix4fv(viewMatLoc, 1, false, glm::value_ptr(viewMat));
+
+        projMat = glm::perspective(fov, aspect, 0.1f, 1000.0f);
+        glUniformMatrix4fv(projMatLoc, 1, false, glm::value_ptr(projMat));
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, indexCnt, 

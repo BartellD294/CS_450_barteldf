@@ -17,31 +17,6 @@
 
 using namespace std;
 
-
-void extractMeshData(aiMesh *mesh, Mesh &m)
-{
-	m.vertices.clear();
-	m.indices.clear();
-	for (int i = 0; i < mesh->mNumVertices; i++)
-	{
-		Vertex v;
-		for (int j = 0; j < mesh -> mVertices[i].Length(); i++)
-		{
-			v.position[j] = (mesh->mVertices[i][j]);
-		}
-		v.color = glm::vec4(mesh->mVertices[0], mesh->mVertices[1], mesh->mVertices[2], 1.0f);
-		m.vertices.push_back(v);
-	}
-	for (int i = 0; i < mesh -> mNumFaces; i++)
-	{
-		aiFace f = mesh->mFaces[i];
-		for (int j = 0; j < mesh->mNumFaces; j++)
-		{
-			m.indices[i] = f.mIndices[i];
-		}
-	}
-}
-
 // Create very simple mesh: a quad (4 vertices, 6 indices, 2 triangles)
 void createSimpleQuad(Mesh &m) {
 	// Clear out vertices and elements
@@ -130,11 +105,31 @@ void createSimplePentagon(Mesh &m) {
 	m.indices.push_back(4);	//middle far right
 }
 
+
+void extractMeshData(aiMesh *mesh, Mesh &m)
+{
+	m.vertices.clear();
+	m.indices.clear();
+	for (int i = 0; i < mesh->mNumVertices; i++)
+	{
+		Vertex v;
+		v.position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		v.color = glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0);
+		m.vertices.push_back(v);
+	}
+
+	for (int i = 0; i < mesh -> mNumFaces; i++)
+	{
+		aiFace f = mesh->mFaces[i];
+		for (int j = 0; j < f.mNumIndices; j++)
+		{
+			m.indices.push_back(f.mIndices[j]);
+		}
+	}
+}
+
 // Main 
 int main(int argc, char **argv) {
-
-
-
 
 	// Are we in debugging mode?
 	bool DEBUG_MODE = true;
@@ -174,15 +169,28 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
+
+	// Create simple quad
+	//Mesh m;
+	//createSimplePentagon(m);
+
+	// Create OpenGL mesh (VAO) from data
+	//MeshGL mgl;
+	//createMeshGL(m, mgl);
+
+	// Enable depth testing
+	glEnable(GL_DEPTH_TEST);
+
 ////////////////////////////////////////////////////////////////////////////////////
 
+	string modelPath = "sampleModels/sphere.obj";
 	if (argc >= 2)
 	{
-		string modelPath = (string)argv[1];
+		modelPath = (string)argv[1];
 	}
 
 	Assimp::Importer importer;
-	const aiScene *scene = importer.ReadFile("teapot.obj",
+	const aiScene *scene = importer.ReadFile(modelPath,
 		aiProcess_Triangulate | aiProcess_FlipUVs |
 		aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
 
@@ -203,19 +211,6 @@ int main(int argc, char **argv) {
 	}
 
 ///////////////////////////////////////////////////////////////////////////////////////
-/*
-	// Create simple quad
-	Mesh m;
-	createSimplePentagon(m);
-
-	// Create OpenGL mesh (VAO) from data
-	MeshGL mgl;
-	createMeshGL(m, mgl);
-
-*/
-	
-	// Enable depth testing
-	glEnable(GL_DEPTH_TEST);
 
 	while (!glfwWindowShouldClose(window)) {
 		// Set viewport size
@@ -234,7 +229,7 @@ int main(int argc, char **argv) {
 
 		for (int i = 0; i < myVector.size(); i++)
 		{
-			//drawMesh(myVector[i]);
+			drawMesh(myVector[i]);
 		}
 
 		// Swap buffers and poll for window events		

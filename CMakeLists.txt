@@ -92,3 +92,8 @@ add_executable(Exercises07 ${GENERAL_SOURCES} "./src/app/Exercises07.cpp")
 target_link_libraries(Exercises07 ${ALL_LIBRARIES})
 install(TARGETS Exercises07 RUNTIME DESTINATION bin/Exercises07)
 install(DIRECTORY shaders/Exercises07 DESTINATION bin/Exercises07/shaders)
+
+add_executable(Assign03 ${GENERAL_SOURCES} "./src/app/Assign03.cpp")
+target_link_libraries(Assign03 ${ALL_LIBRARIES})
+install(TARGETS Assign03 RUNTIME DESTINATION bin/Assign03)
+install(DIRECTORY shaders/Assign03 DESTINATION bin/Assign03/shaders)

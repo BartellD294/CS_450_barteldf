@@ -27,10 +27,10 @@ void extractMeshData(aiMesh *mesh, Mesh &m)
 		Vertex v;
 		for (int j = 0; j < mesh -> mVertices[i].Length(); i++)
 		{
-			v.position[j] = mesh->mVertices[i][j];
+			v.position[j] = (mesh->mVertices[i][j]);
 		}
 		v.color = glm::vec4(mesh->mVertices[0], mesh->mVertices[1], mesh->mVertices[2], 1.0f);
-		m.vertices[i] = v;
+		m.vertices.push_back(v);
 	}
 	for (int i = 0; i < mesh -> mNumFaces; i++)
 	{
@@ -192,6 +192,16 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	vector<MeshGL> myVector;
+	for (int i = 0; i < scene->mNumMeshes; i++)
+	{
+		Mesh m;
+		MeshGL mg;
+		extractMeshData(scene->mMeshes[i], m);
+		createMeshGL(m, mg);
+		myVector.push_back(mg);
+	}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 /*
 	// Create simple quad
@@ -222,6 +232,11 @@ int main(int argc, char **argv) {
 		// Draw object
 		//drawMesh(mgl);	
 
+		for (int i = 0; i < myVector.size(); i++)
+		{
+			//drawMesh(myVector[i]);
+		}
+
 		// Swap buffers and poll for window events		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -232,6 +247,11 @@ int main(int argc, char **argv) {
 
 	// Clean up mesh
 	//cleanupMesh(mgl);
+	for (int i = 0; i < myVector.size(); i++)
+	{
+		cleanupMesh(myVector[i]);
+	}
+	myVector.clear();
 
 	// Clean up shader programs
 	glUseProgram(0);

@@ -213,8 +213,8 @@ void makeCylinder(Mesh &m, float length, float radius, int faceCnt)
         vleft.color = glm::vec4(1,0,0,1);
         vright.color = glm::vec4(0,1,0,1);
 
-        vleft.texCoord = glm::vec2(0.0f, ((float)i)/2.0f);
-        vright.texCoord = glm::vec2(1.0f, ((float)i)/2.0f);
+        vleft.texcoord = glm::vec2(0.0f, ((float)i)/2.0f);
+        vright.texcoord = glm::vec2(1.0f, ((float)i)/2.0f);
         m.vertices.push_back(vleft);
         m.vertices.push_back(vright);
     }
@@ -455,7 +455,7 @@ int main(int argc, char **argv) {
     glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex),
         (void*)offsetof(Vertex,normal));
     glVertexAttribPointer(3, 2, GL_FLOAT, false, sizeof(Vertex),
-        (void*)offsetof(Vertex, texCoord));
+        (void*)offsetof(Vertex, texcoord));
 
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

@@ -29,8 +29,8 @@ float rotAngle = 0.0f;
 glm::mat4 makeRotateZ(glm::vec3 offset)
 {
 	glm::mat4 m = glm::translate(-offset);
-	m = glm::rotate(m, glm::radians(rotAngle), glm::vec3(0,0,1.0));
-	m = glm::translate(m, offset);
+	m = glm::rotate(glm::radians(rotAngle), glm::vec3(0,0,1.0)) * m;
+	m = glm::translate(offset) * m;
 	return m;
 }
 
@@ -42,7 +42,7 @@ void renderScene(vector<MeshGL> &allMeshes, aiNode *node, glm::mat4 parentMat, G
 	glm::mat4 modelMat = parentMat * nodeT;
 	glm::vec3 pos = modelMat[3];
 	glm::mat4 R = makeRotateZ(pos);
-	glm::mat4 tmpModel = modelMat;// * modelMat;
+	glm::mat4 tmpModel = R * modelMat;
 	glUniformMatrix4fv(modelMatLoc, 1, false, glm::value_ptr(tmpModel));
 	//glUniformMatrix4fv(modelMatLoc, 1, false, glm::value_ptr(modelMat));
 
@@ -178,7 +178,8 @@ void extractMeshData(aiMesh *mesh, Mesh &m)
 	{
 		Vertex v;
 		v.position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-		v.color = glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0);
+		//v.color = glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0);
+		v.color = glm::vec4(1.0, 0, 0, 1.0);
 		m.vertices.push_back(v);
 	}
 
@@ -256,9 +257,9 @@ int main(int argc, char **argv) {
 	}
 
 	Assimp::Importer importer;
-	const aiScene *scene = importer.ReadFile(modelPath,
-		aiProcess_Triangulate | aiProcess_FlipUVs |
-		aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
+	unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs
+					| aiProcess_GenNormals | aiProcess_JoinIdenticalVertices;
+	const aiScene *scene = importer.ReadFile(modelPath, flags);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -295,13 +296,6 @@ int main(int argc, char **argv) {
 
 		// Draw object
 		//drawMesh(mgl);	
-
-		/*
-		for (int i = 0; i < myVector.size(); i++)
-		{
-			drawMesh(myVector[i]);
-		}
-		*/
 
 		renderScene(myVector, scene->mRootNode, glm::mat4(1.0), modelMatLoc, 0);
 

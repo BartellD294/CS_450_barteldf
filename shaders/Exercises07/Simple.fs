@@ -16,26 +16,36 @@ struct PointLight
 uniform PointLight light;
 
 uniform sampler2D diffuseTexture;
+uniform sampler2D normalTexture;
 in vec2 interUV;
+in vec3 interTangent;
+
 void main()
 {
     vec3 N = normalize(interNormal);
+    vec3 T = normalize(interTangent);
+    T = normalize(T - dot(T,N) * N);
+    vec3 B = normalize(cross(N, T));
+
+    vec3 texN = vec3(texture(normalTexture, interUV));
+    texN.x = (texN.x - 0.5) * 2.0;
+    texN.y = (texN.y - 0.5) * 2.0;
+    texN = normalize(texN);
+    mat3 toView = mat3(T,B,N);
+    N = normalize(toView * texN);
 
     vec4 texColor = texture(diffuseTexture, interUV);
     vec3 lightPos = vec3(light.pos);
-    vec3 l = lightPos - interPos;
-    float dist = length(l);
-    l = normalize(l);
+    vec3 L = lightPos - interPos;
+    float dist = length(L);
+    L = normalize(L);
     float att = 1.0 / (dist*dist + 1.0);
 
-    //out_color = interColor; //vec4(1.0, 0.0, 0.0, 1.0);
-    //out_color = vec4(att, att, att, 1.0);
-    //vec3 sN = (N + 1.0) / 2.0;
-    //out_color = vec4(sN, 1.0);
-
-    float diff = max(dot(N, l), 0.0);
-    vec3 diff_color = diff * vec3(interColor);
+    float diff = max(dot(N, L), 0.0);
+    //vec3 diff_color = diff * vec3(interColor);
+    //diff_color *= vec3(texColor);
+    vec3 diff_color = diff * vec3(texColor);
+    out_color = vec4(diff_color, 1.0);
+    //out_color = vec4(texN, 1.0);
     //out_color = vec4(diff, diff, diff, 1.0);
-    //out_color = vec4(diff_color, 1.0);
-    out_color = texColor;
 }

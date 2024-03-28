@@ -68,3 +68,9 @@ add_executable(ProfExercises ${GENERAL_SOURCES} "./src/app/ProfExercises.cpp")
 target_link_libraries(ProfExercises ${ALL_LIBRARIES})
 install(TARGETS ProfExercises RUNTIME DESTINATION bin/ProfExercises)
 install(DIRECTORY shaders/ProfExercises DESTINATION bin/ProfExercises/shaders)
+
+# ProfFBOExercises
+add_executable(ProfFBOExercises ${GENERAL_SOURCES} "./src/app/ProfFBOExercises.cpp")
+target_link_libraries(ProfFBOExercises ${ALL_LIBRARIES})
+install(TARGETS ProfFBOExercises RUNTIME DESTINATION bin/ProfFBOExercises)
+install(DIRECTORY shaders/ProfFBOExercises DESTINATION bin/ProfFBOExercises/shaders)

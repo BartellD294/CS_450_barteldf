@@ -110,3 +110,15 @@ add_executable(Assign05 ${GENERAL_SOURCES} "./src/app/Assign05.cpp")
 target_link_libraries(Assign05 ${ALL_LIBRARIES})
 install(TARGETS Assign05 RUNTIME DESTINATION bin/Assign05)
 install(DIRECTORY shaders/Assign05 DESTINATION bin/Assign05/shaders)
+
+# ProfFBOExercises
+add_executable(ProfFBOExercises ${GENERAL_SOURCES} "./src/app/ProfFBOExercises.cpp")
+target_link_libraries(ProfFBOExercises ${ALL_LIBRARIES})
+install(TARGETS ProfFBOExercises RUNTIME DESTINATION bin/ProfFBOExercises)
+install(DIRECTORY shaders/ProfFBOExercises DESTINATION bin/ProfFBOExercises/shaders)
+
+# FBOExercises
+add_executable(FBOExercises ${GENERAL_SOURCES} "./src/app/FBOExercises.cpp")
+target_link_libraries(FBOExercises ${ALL_LIBRARIES})
+install(TARGETS FBOExercises RUNTIME DESTINATION bin/FBOExercises)
+install(DIRECTORY shaders/FBOExercises DESTINATION bin/FBOExercises/shaders)

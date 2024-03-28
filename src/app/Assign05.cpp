@@ -25,6 +25,33 @@
 using namespace std;
 
 float rotAngle = 0.0f;
+glm::vec3 eye = glm::vec3(0,0,1);
+glm::vec3 lookAt = glm::vec3(0,0,0);
+glm::vec2 mousePos;
+
+
+glm::mat4 makeLocalRotate(glm::vec3 offset, glm::vec3 axis, float angle)
+{
+	glm::mat4 transformation = glm::translate(-offset);
+	transformation = glm::rotate(glm::radians(angle), axis) * transformation;
+	transformation = glm::translate(offset) * transformation;
+	return transformation;
+}
+
+static void mouse_position_callback(GLFWwindow *window, double xpos, double ypos)
+{
+	glm::vec2 relMouse = glm::vec2(xpos, ypos) - mousePos;
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	if ((width > 0) && (height > 0))
+	{
+		relMouse = relMouse / glm::vec2(float(width), float(height));
+		glm::vec4 lookAtV = makeLocalRotate(eye, glm::vec3(0,1,0), 30.0f * relMouse[0]) * glm::vec4(lookAt, 1.0f);
+		lookAtV = makeLocalRotate(eye, glm::cross(glm::vec3(lookAt - eye), glm::vec3(0,1,0)), 30.0f * relMouse[1]) * lookAtV;
+		lookAt = glm::vec3(lookAtV);
+	}
+	mousePos = glm::vec2(xpos, ypos);
+}
 
 glm::mat4 makeRotateZ(glm::vec3 offset)
 {
@@ -75,6 +102,38 @@ static void key_callback(GLFWwindow *window,
 		{
             rotAngle -= 1.0;
         }
+		if (key == GLFW_KEY_W)
+		{
+			glm::vec3 change = lookAt - eye;
+			glm::normalize(change);
+			change = change * 0.1f;
+			lookAt += change;
+			eye += change;
+		}
+		if (key == GLFW_KEY_S)
+		{
+			glm::vec3 change = lookAt - eye;
+			glm::normalize(change);
+			change = change * 0.1f;
+			lookAt -= change;
+			eye -= change;
+		}
+		if (key == GLFW_KEY_A)
+		{
+			glm::vec3 change = glm::cross(glm::vec3(lookAt - eye), glm::vec3(0,1,0));
+			glm::normalize(change);
+			change = change * 0.1f;
+			lookAt -= change;
+			eye -= change;
+		}
+		if (key == GLFW_KEY_D)
+		{
+			glm::vec3 change = glm::cross(glm::vec3(lookAt - eye), glm::vec3(0,1,0));
+			glm::normalize(change);
+			change = change * 0.1f;
+			lookAt += change;
+			eye += change;
+		}
     }
 }
 
@@ -201,7 +260,7 @@ int main(int argc, char **argv) {
 
 	// GLFW setup
 	// Switch to 4.1 if necessary for macOS
-	GLFWwindow* window = setupGLFW("Assign04: barteldf", 4, 3, 800, 800, DEBUG_MODE);
+	GLFWwindow* window = setupGLFW("Assign05: barteldf", 4, 3, 800, 800, DEBUG_MODE);
 
 	// GLEW setup
 	setupGLEW(window);
@@ -221,8 +280,8 @@ int main(int argc, char **argv) {
 	GLuint programID = 0;
 	try {		
 		// Load vertex shader code and fragment shader code
-		string vertexCode = readFileToString("./shaders/Assign04/Basic.vs");
-		string fragCode = readFileToString("./shaders/Assign04/Basic.fs");
+		string vertexCode = readFileToString("./shaders/Assign05/Basic.vs");
+		string fragCode = readFileToString("./shaders/Assign05/Basic.fs");
 
 		// Print out shader code, just to check
 		if(DEBUG_MODE) printShaderCode(vertexCode, fragCode);
@@ -281,6 +340,17 @@ int main(int argc, char **argv) {
 
 	GLint modelMatLoc = glGetUniformLocation(programID, "modelMat");
 
+/////////////////////////////////////////////////////////////////////////////
+	// assign05 stuff here
+	double mx, my;
+	glfwGetCursorPos(window, &mx, &my);
+	mousePos = glm::vec2(mx, my);
+	glfwSetCursorPosCallback(window, mouse_position_callback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	GLint viewMatLoc = glGetUniformLocation(programID, "viewMat");
+	GLint projMatLoc = glGetUniformLocation(programID, "projMat");
+
 
 	while (!glfwWindowShouldClose(window)) {
 		// Set viewport size
@@ -293,6 +363,25 @@ int main(int argc, char **argv) {
 
 		// Use shader program
 		glUseProgram(programID);
+
+		glm::mat4 viewMat = glm::lookAt(eye, lookAt, glm::vec3(0,1,0));
+		glUniformMatrix4fv(viewMatLoc, 1, false, glm::value_ptr(viewMat));
+		float aspectRatio;
+		if ((fwidth == 0) || (fheight == 0))
+		{
+			aspectRatio = 1.0;
+		}
+		else aspectRatio = float(fwidth) / (float)fheight;
+		glm::mat4 projMat = glm::perspective(glm::radians(90.0f), aspectRatio, 0.01f, 50.0f);
+		glUniformMatrix4fv(projMatLoc, 1, false, glm::value_ptr(projMat));
+
+
+
+
+
+
+
+
 
 		// Draw object
 		//drawMesh(mgl);	

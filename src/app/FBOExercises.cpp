@@ -456,7 +456,7 @@ int main(int argc, char **argv) {
                                                 "./shaders/FBOExercises/Simple.fs");
 
     GLuint quadProgID = loadAndCreateShaderProgram("./shaders/FBOExercises/Quad.vs",
-                                                "./shaders/FBOExercises/Quad.fs");
+                                                "./shaders/FBOExercises/Wavy.fs");
 
     GLint modelMatLoc = glGetUniformLocation(progID, "modelMat");
     GLint viewMatLoc = glGetUniformLocation(progID, "viewMat");
@@ -490,7 +490,7 @@ int main(int argc, char **argv) {
     };
     */
 
-   float quadScale = 1.0f; //0.3f;
+   float quadScale = 0.75f; //0.3f;
 
     //vector<Vertex> vertOnly;
     Mesh quad;
@@ -557,6 +557,7 @@ int main(int argc, char **argv) {
         float fov = glm::radians(90.0f);
 
         glViewport(0,0,frameWidth,frameHeight);
+        glClearColor(1.0, 1.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(progID);
 
@@ -602,6 +603,7 @@ int main(int argc, char **argv) {
         glViewport(0, 0, frameWidth, frameHeight);
         glClearColor(0.0, 0.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         drawMesh(quadGL);
 
         glUseProgram(0);

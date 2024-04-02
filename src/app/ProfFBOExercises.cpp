@@ -456,7 +456,10 @@ int main(int argc, char **argv) {
                                                 "./shaders/ProfFBOExercises/Simple.fs");
 
     GLuint quadProgID = loadAndCreateShaderProgram("./shaders/ProfFBOExercises/Quad.vs",
-                                                "./shaders/ProfFBOExercises/Quad.fs");
+                                                //"./shaders/ProfFBOExercises/Quad.fs");
+                                                //"./shaders/ProfFBOExercises/Invert.fs");
+                                                //"./shaders/ProfFBOExercises/Filter.fs");
+                                                "./shaders/ProfFBOExercises/Wavy.fs");
 
     GLint modelMatLoc = glGetUniformLocation(progID, "modelMat");
     GLint viewMatLoc = glGetUniformLocation(progID, "viewMat");
@@ -602,6 +605,7 @@ int main(int argc, char **argv) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawMesh(quadGL);
+        //drawMesh(mainGL);
 
         glUseProgram(0);
 

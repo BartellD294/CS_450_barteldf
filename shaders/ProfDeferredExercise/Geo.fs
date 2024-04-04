@@ -1,23 +1,18 @@
 #version 430 core
 // 410 mac
 
-layout(location=0) out vec4 out_color;
+layout(location=0) out vec3 gPosition;
+layout(location=1) out vec3 gNormal;
+layout(location=2) out vec4 gAlbedoSpec;
 
 in vec4 interColor;
 in vec3 interPos;
 in vec3 interNormal;
-
-struct PointLight {
-    vec4 pos;
-    vec4 color;
-};
-
-uniform PointLight light;
+in vec2 interUV;
+in vec3 interTangent;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D normalTexture;
-in vec2 interUV;
-in vec3 interTangent;
 
 void main() {
     vec3 N = normalize(interNormal);
@@ -34,19 +29,13 @@ void main() {
 
     N = normalize(toView*texN);
 
-    vec4 texColor = texture(diffuseTexture, interUV);
+    vec3 texColor = vec3(texture(diffuseTexture, interUV));
+    vec3 vertColor = vec3(interColor);
 
-    vec3 lightPos = vec3(light.pos);
-    vec3 L = lightPos - interPos;
-    float dist = length(L);
-    L = normalize(L);
-    float att = 1.0 / (dist*dist + 1.0);
-    
-    float diff = max(dot(N, L), 0.0);
-    //vec3 diff_color = diff*vec3(interColor);  
-    //diff_color *= vec3(texColor);
-    vec3 diff_color = diff*vec3(texColor);  
-    out_color = vec4(diff_color, 1.0);
-    //out_color = vec4(texN, 1.0);
-    //out_color = vec4(diff,diff,diff,1.0);
+    vec3 albedo = texColor; // texColor*vertColor;
+
+    gPosition = interPos;
+    gNormal = N;
+    gAlbedoSpec.rgb = albedo;
+    gAlbedoSpec.a = 1;
 }

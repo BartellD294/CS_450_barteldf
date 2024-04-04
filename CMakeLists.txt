@@ -122,3 +122,9 @@ add_executable(FBOExercises ${GENERAL_SOURCES} "./src/app/FBOExercises.cpp")
 target_link_libraries(FBOExercises ${ALL_LIBRARIES})
 install(TARGETS FBOExercises RUNTIME DESTINATION bin/FBOExercises)
 install(DIRECTORY shaders/FBOExercises DESTINATION bin/FBOExercises/shaders)
+
+# DeferredExercise
+add_executable(DeferredExercise ${GENERAL_SOURCES} "./src/app/DeferredExercise.cpp")
+target_link_libraries(DeferredExercise ${ALL_LIBRARIES})
+install(TARGETS DeferredExercise RUNTIME DESTINATION bin/DeferredExercise)
+install(DIRECTORY shaders/DeferredExercise DESTINATION bin/DeferredExercise/shaders)

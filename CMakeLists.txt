@@ -74,3 +74,11 @@ add_executable(ProfFBOExercises ${GENERAL_SOURCES} "./src/app/ProfFBOExercises.c
 target_link_libraries(ProfFBOExercises ${ALL_LIBRARIES})
 install(TARGETS ProfFBOExercises RUNTIME DESTINATION bin/ProfFBOExercises)
 install(DIRECTORY shaders/ProfFBOExercises DESTINATION bin/ProfFBOExercises/shaders)
+
+# ProfDeferredExercise
+add_executable(ProfDeferredExercise ${GENERAL_SOURCES} "./src/app/ProfDeferredExercise.cpp")
+target_link_libraries(ProfDeferredExercise ${ALL_LIBRARIES})
+install(TARGETS ProfDeferredExercise RUNTIME DESTINATION bin/ProfDeferredExercise)
+install(DIRECTORY shaders/ProfDeferredExercise DESTINATION bin/ProfDeferredExercise/shaders)
+
+

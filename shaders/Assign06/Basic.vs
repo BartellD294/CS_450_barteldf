@@ -22,7 +22,7 @@ void main()
 	// For now, just pass along vertex position (no transformations)
 	gl_Position = projMat * viewMat * modelMat * objPos;
 
-	interPos = viewMat * modelMat * vec4(position;
+	interPos = viewMat * modelMat * vec4(position, 1.0);
 	interNormal = normMat * normal;
 
 	// Output per-vertex color

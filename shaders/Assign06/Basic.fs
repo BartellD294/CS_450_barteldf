@@ -18,7 +18,11 @@ uniform PointLight light;
 void main()
 {
 	vec4 N = normalize(interNormal);
-	vec3 L = light
+	vec3 L = normalize(vec3(light.pos-interPos));
+	float diffuseCoefficient = max(0, dot(vec3(N),L));
+	vec3 diffColor = vec3(diffuseCoefficient * vertexColor * light.color);
+	float shininess = 10.0;
+	//float specularCoefficient = vec3(vec3(1.0,1.0,1.0) * diffuseCoefficient * pow(max));
 	// Just output interpolated color
-	out_color = vertexColor;
+	out_color = vec4(diffColor, 1.0);
 }

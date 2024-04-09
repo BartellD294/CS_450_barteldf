@@ -26,8 +26,11 @@ using namespace std;
 
 struct PointLight
 {
-
+	glm::vec4 pos;
+	glm::vec4 color;
 };
+
+PointLight light;
 
 float rotAngle = 0.0f;
 glm::vec3 eye = glm::vec3(0,0,1);
@@ -67,7 +70,8 @@ glm::mat4 makeRotateZ(glm::vec3 offset)
 }
 
 
-void renderScene(vector<MeshGL> &allMeshes, aiNode *node, glm::mat4 parentMat, GLint modelMatLoc, int level, GLint normMatLoc, glm::mat4 viewMat)
+void renderScene(vector<MeshGL> &allMeshes, aiNode *node, glm::mat4 parentMat, GLint modelMatLoc, int level,
+					GLint normMatLoc, glm::mat4 viewMat)
 {
 	glm::mat4 nodeT;
 	aiMatToGLM4(node->mTransformation, nodeT);
@@ -140,6 +144,22 @@ static void key_callback(GLFWwindow *window,
 			change = change * 0.1f;
 			lookAt += change;
 			eye += change;
+		}
+		if (key == GLFW_KEY_1)
+		{
+			light.color = glm::vec4(1.0, 1.0, 1.0, 1.0);
+		}
+		if (key == GLFW_KEY_2)
+		{
+			light.color = glm::vec4(1.0, 0, 0, 1.0);
+		}
+		if (key == GLFW_KEY_3)
+		{
+			light.color = glm::vec4(0, 1.0, 0, 1.0);
+		}
+		if (key == GLFW_KEY_4)
+		{
+			light.color = glm::vec4(0, 0, 1.0, 1.0);
 		}
     }
 }
@@ -245,7 +265,8 @@ void extractMeshData(aiMesh *mesh, Mesh &m)
 		Vertex v;
 		v.position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 		//v.color = glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0);
-		v.color = glm::vec4(1.0, 0, 0, 1.0);
+		v.color = glm::vec4(1.0, 1.0, 0, 1.0);
+		v.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 		m.vertices.push_back(v);
 	}
 
@@ -358,6 +379,13 @@ int main(int argc, char **argv) {
 	GLint viewMatLoc = glGetUniformLocation(programID, "viewMat");
 	GLint projMatLoc = glGetUniformLocation(programID, "projMat");
 
+	light.pos = glm::vec4(0.5, 0.5, 0.5, 1);
+	light.color = glm::vec4(1,1,1,1);
+
+	GLint lightPosLoc = glGetUniformLocation(programID, "light.pos");
+	GLint lightColLoc = glGetUniformLocation(programID, "light.color");
+	GLint normMatLoc = glGetUniformLocation(programID, "normMat");
+
 
 	while (!glfwWindowShouldClose(window)) {
 		// Set viewport size
@@ -384,16 +412,18 @@ int main(int argc, char **argv) {
 
 
 
-
-
-
-
-
-
 		// Draw object
-		//drawMesh(mgl);	
+		//drawMesh(mgl);
 
-		renderScene(myVector, scene->mRootNode, glm::mat4(1.0), modelMatLoc, 0);
+		//////////////////////////////////////////////////////////////
+		// assign06
+		glm::vec4 eyeLightPos = glm::lookAt(eye, lookAt, glm::vec3(0,1,0)) * light.pos;
+
+		glUniform4fv(lightPosLoc, 1, glm::value_ptr(eyeLightPos));
+		glUniform4fv(lightColLoc, 1, glm::value_ptr(light.color));
+		/////////////////////////////////////////////////////////////
+
+		renderScene(myVector, scene->mRootNode, glm::mat4(1.0), modelMatLoc, 0, normMatLoc, viewMat);
 
 		// Swap buffers and poll for window events		
 		glfwSwapBuffers(window);

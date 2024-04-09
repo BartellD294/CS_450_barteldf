@@ -7,7 +7,7 @@ in vec2 interUV;
 
 uniform sampler2D gPosition;
 uniform sampler2D gNormal;
-uniform sampler2D glAlbedoSpec;
+uniform sampler2D gAlbedoSpec;
 
 struct PointLight {
     vec4 pos;
@@ -20,7 +20,7 @@ uniform PointLight lights[LIGHT_CNT];
 void main() {
     vec3 interPos = vec3(texture(gPosition, interUV));
     vec3 N = vec3(texture(gNormal, interUV));
-    vec4 albedoSpec = texture(glAlbedoSpec, interUV);
+    vec4 albedoSpec = texture(gAlbedoSpec, interUV);
     vec3 albedo = albedoSpec.rgb;
     float shininess = albedoSpec.a;
 

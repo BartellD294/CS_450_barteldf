@@ -288,7 +288,7 @@ int main(int argc, char **argv) {
 
 	// GLFW setup
 	// Switch to 4.1 if necessary for macOS
-	GLFWwindow* window = setupGLFW("Assign05: barteldf", 4, 3, 800, 800, DEBUG_MODE);
+	GLFWwindow* window = setupGLFW("Assign06: barteldf", 4, 3, 800, 800, DEBUG_MODE);
 
 	// GLEW setup
 	setupGLEW(window);
@@ -308,8 +308,8 @@ int main(int argc, char **argv) {
 	GLuint programID = 0;
 	try {		
 		// Load vertex shader code and fragment shader code
-		string vertexCode = readFileToString("./shaders/Assign05/Basic.vs");
-		string fragCode = readFileToString("./shaders/Assign05/Basic.fs");
+		string vertexCode = readFileToString("./shaders/Assign06/Basic.vs");
+		string fragCode = readFileToString("./shaders/Assign06/Basic.fs");
 
 		// Print out shader code, just to check
 		if(DEBUG_MODE) printShaderCode(vertexCode, fragCode);

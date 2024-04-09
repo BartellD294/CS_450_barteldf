@@ -348,7 +348,7 @@ void makeCylinder(Mesh &m, float length, float radius, int faceCnt) {
         vleft.position = left;
         vright.position = right;
         vleft.color = glm::vec4(1,0,0,1);
-        vright.color = glm::vec4(0,1,0,1);
+        vright.color = glm::vec4(1,1,0,1);
 
         vleft.texcoord = glm::vec2(0.0f, 2.0f*((float)i)/faceCnt);
         vright.texcoord = glm::vec2(2.0f, 2.0f*((float)i)/faceCnt);
@@ -528,12 +528,13 @@ int main(int argc, char **argv) {
     cout << "normalMatLoc: " << normalMatLoc << endl;
 
     float lightAngleInc = glm::radians(360.0f/LIGHT_CNT);
-    float radius = 0.8f;
+    float radius = 4.0f;
 
     for (int i = 0; i < LIGHT_CNT; i++)
     {
         lights[i].pos = glm::vec4(radius * sin(lightAngleInc * i), 0.1f,
                                     radius * cos(lightAngleInc * i), 1.0f);
+        cout << "light " << std::to_string(i) << ": " << glm::to_string(lights[i].pos) << endl;
         string pos_str = "lights[" + to_string(i) + "].pos";
         string color_str = "lights[" + to_string(i) + "].color";
         lights[i].posLoc = glGetUniformLocation(lightProgID, pos_str.c_str());
@@ -634,13 +635,13 @@ int main(int argc, char **argv) {
         float fov = glm::radians(90.0f);
 
         glViewport(0,0,frameWidth,frameHeight);
-        glClearColor(1.0, 1.0, 0.0, 1.0);
+        glClearColor(0.0, 0.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(geoProgID);
 
         glUniformMatrix4fv(modelMatLoc, 1, false, glm::value_ptr(modelMat));
 
-        viewMat = glm::lookAt(glm::vec3(4,4,4), glm::vec3(0,0,0), glm::vec3(0,1,0));
+        viewMat = glm::lookAt(glm::vec3(0,7,7), glm::vec3(0,0,0), glm::vec3(0,1,0));
         glUniformMatrix4fv(viewMatLoc, 1, false, glm::value_ptr(viewMat));
 
         projMat = glm::perspective(fov, aspect, 0.1f, 1000.0f);

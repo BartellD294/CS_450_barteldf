@@ -33,7 +33,7 @@ void main()
     vec3 texColor = vec3(texture(diffuseTexture, interUV));
     vec3 vertColor = vec3(interColor);
 
-    vec3 albedo = texColor;
+    vec3 albedo = vertColor;//texColor;
 
     gPosition = interPos;
     gNormal = N;

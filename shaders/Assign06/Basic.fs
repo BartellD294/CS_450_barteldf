@@ -5,7 +5,7 @@ layout(location=0) out vec4 out_color;
  
 in vec4 vertexColor; // Now interpolated across face
 in vec4 interPos;
-in vec4 interNormal;
+in vec3 interNormal;
 
 struct PointLight
 {

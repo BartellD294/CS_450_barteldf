@@ -650,7 +650,6 @@ int main(int argc, char **argv) {
         glm::mat3 normalMat = glm::transpose(glm::inverse(glm::mat3(viewMat*modelMat)));
         glUniformMatrix3fv(normalMatLoc, 1, false, glm::value_ptr(normalMat));
 
-
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffTexID);
         glActiveTexture(GL_TEXTURE1);

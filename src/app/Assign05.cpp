@@ -46,8 +46,8 @@ static void mouse_position_callback(GLFWwindow *window, double xpos, double ypos
 	if ((width > 0) && (height > 0))
 	{
 		relMouse = relMouse / glm::vec2(float(width), float(height));
-		glm::vec4 lookAtV = makeLocalRotate(eye, glm::vec3(0,1,0), 30.0f * relMouse[0]) * glm::vec4(lookAt, 1.0f);
-		lookAtV = makeLocalRotate(eye, glm::cross(glm::vec3(lookAt - eye), glm::vec3(0,1,0)), 30.0f * relMouse[1]) * lookAtV;
+		glm::vec4 lookAtV = makeLocalRotate(eye, glm::vec3(0,1,0), -30.0f * relMouse[0]) * glm::vec4(lookAt, 1.0f);
+		lookAtV = makeLocalRotate(eye, glm::cross(glm::vec3(lookAt - eye), glm::vec3(0,1,0)), -30.0f * relMouse[1]) * lookAtV;
 		lookAt = glm::vec3(lookAtV);
 	}
 	mousePos = glm::vec2(xpos, ypos);

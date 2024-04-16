@@ -618,7 +618,7 @@ int main(int argc, char **argv) {
         glUniform1i(diffuseTexLoc, 0);
         glUniform1i(normalTexLoc, 1);
 
-        drawMesh(mainGL);
+        //drawMesh(mainGL);
 
         // SECOND PASS /////////////////////////////////////////////
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -627,13 +627,13 @@ int main(int argc, char **argv) {
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, fbo.colorIDs.at(0));
-        glUniform1i(screenTexLoc, 0);
+        //glUniform1i(screenTexLoc, 0);
 
         glViewport(0,0,frameWidth,frameHeight);
         glClearColor(0.0, 0.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawMesh(quadGL);
+        //drawMesh(quadGL);
         //drawMesh(mainGL);
 
         glUseProgram(0);

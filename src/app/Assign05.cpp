@@ -40,7 +40,7 @@ glm::mat4 makeLocalRotate(glm::vec3 offset, glm::vec3 axis, float angle)
 
 static void mouse_position_callback(GLFWwindow *window, double xpos, double ypos)
 {
-	glm::vec2 relMouse = glm::vec2(xpos, ypos) - mousePos;
+	glm::vec2 relMouse = -(glm::vec2(xpos, ypos) - mousePos);
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	if ((width > 0) && (height > 0))

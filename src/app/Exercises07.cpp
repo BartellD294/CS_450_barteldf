@@ -12,9 +12,17 @@
 #include "glm/gtx/string_cast.hpp"
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 using namespace std;
+
+glm::quat startRot = glm::quat(glm::radians(glm::vec3(70, 32, 23)));
+glm::quat endRot = glm::quat(glm::radians(glm::vec3(10, 12, 32)));
+float t = 0.0f;
+glm::quat currentRot = startRot;
+
 
 glm::mat4 modelMat(1.0);
 string transformString = "v";
@@ -63,7 +71,15 @@ static void mouse_motion_callback(GLFWwindow *window, double xpos, double ypos) 
     cout << "MOUSE DIFF: " << glm::to_string(mouseDiff) << endl;
     
     float angle = 2.0f*mouseDiff.x;
-    glm::mat4 R;
+
+    cout << "Angle: " << angle << endl;
+
+    t += angle;
+    t = max(0.0f, min(1.0f, t));
+    currentRot = glm::mix(startRot, endRot, t);
+    glm::mat4 R = glm::toMat4(currentRot);
+    modelMat = R;
+    //glm::mat4 R;
     if(!leftMouseDown) {
         R = glm::rotate(angle, glm::vec3(0,1,0));
     }

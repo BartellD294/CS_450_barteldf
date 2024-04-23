@@ -87,7 +87,7 @@ void main()
 	float NDF = getNDF(H, N, roughness);
 	float G = getGF(L, V, N, roughness);
 	kS = kS * NDF * G;
-	kS = kS / (4.0 * max(0, dot(N, L)) * max(0, dot(N, V))) + 0.0001;
+	kS = kS / ((4.0 * max(0, dot(N, L)) * max(0, dot(N, V))) + 0.0001);
 	vec3 finalColor = (kD + kS) * vec3(light.color) * max(0, dot(N,L));
 	out_color = vec4(finalColor, 1.0);
 }

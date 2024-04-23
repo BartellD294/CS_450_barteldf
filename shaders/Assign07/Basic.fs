@@ -28,7 +28,7 @@ vec3 getFresnelAtAngleZero(vec3 albedo, float metallic)
 vec3 getFresnel(vec3 F0, vec3 L, vec3 H)
 {
 	float cosAngle = max(0, dot(L,H));
-	vec3 schlick = F0 + (1-F0) * (1-max(0, cosAngle));
+	vec3 schlick = F0 + (1-F0) * pow(1-max(0, cosAngle), 5);
 	return schlick;
 	//COS(THETA) = DOT(H,L)
 }
